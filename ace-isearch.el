@@ -159,7 +159,9 @@ of `isearch-string' is longer than or equal to `ace-isearch-input-length'."
 (defun ace-isearch--jumper-function ()
   (cond ((and (= (length isearch-string) 1)
               (not (or isearch-regexp
-                       isearch-word))
+                       (if (>= emacs-major-version 24)
+                           isearch-word
+                         isearch-regexp-function)))
               (ace-isearch--fboundp ace-isearch-function
                 (or (eq ace-isearch-use-jump t)
                     (and (eq ace-isearch-use-jump 'printing-char)
