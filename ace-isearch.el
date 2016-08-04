@@ -208,6 +208,12 @@ of `isearch-string' is longer than or equal to `ace-isearch-input-length'."
            (error (format "Function name %s for ace-isearch is invalid!"
                           ace-isearch-function))))))
 
+;; Workaround for Emacs25.1-rc1 or later.
+;; The function `isearch-exit` causes error due to its internal changes.
+;; See also https://lists.gnu.org/archive/html/bug-gnu-emacs/2015-07/msg00476.html
+;;
+;; This function was bollowd from helm-swoop
+;; https://github.com/ShingoFukuyama/helm-swoop/blob/1.7.2/helm-swoop.el#L692-L700
 (defun ace-isearch--helm-swoop-from-isearch ()
   "Invoke `helm-swoop' from ace-isearch."
   (interactive)
