@@ -101,7 +101,7 @@ character."
                  (const :tag "Never" nil))
   :group 'ace-isearch)
 
-(defcustom ace-isearch-function-from-isearch 'helm-swoop-from-isearch
+(defcustom ace-isearch-function-from-isearch 'ace-isearch--helm-swoop-from-isearch
   "Symbol name of function which is invoked when the length of `isearch-string'
 is longer than or equal to `ace-isearch-input-length'."
   :type 'symbol
@@ -113,7 +113,7 @@ of `isearch-string' is longer than or equal to `ace-isearch-input-length'."
   :type 'boolean
   :group 'ace-isearch)
 
-(defcustom ace-isearch-fallback-function 'helm-swoop-from-isearch
+(defcustom ace-isearch-fallback-function 'ace-isearch--helm-swoop-from-isearch
   "Symbol name of function which is invoked when isearch fails and
 `ace-isearch-use-fallback-function' is non-nil."
   :type 'symbol
@@ -207,6 +207,16 @@ of `isearch-string' is longer than or equal to `ace-isearch-input-length'."
           (t
            (error (format "Function name %s for ace-isearch is invalid!"
                           ace-isearch-function))))))
+
+(defun ace-isearch--helm-swoop-from-isearch ()
+  "Invoke `helm-swoop' from ace-isearch."
+  (interactive)
+  (let (($query (if isearch-regexp
+                    isearch-string
+                  (regexp-quote isearch-string))))
+    (let (search-nonincremental-instead)
+      (ignore-errors (isearch-exit)))
+    (helm-swoop :$query $query)))
 
 ;;;###autoload
 (defun ace-isearch-jump-during-isearch ()
